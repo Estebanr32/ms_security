@@ -1,20 +1,19 @@
 package com.uc.ms_security.service;
 
-import java.util.List;
-
-import com.uc.ms_security.dto.user.UserDetailResponseDTO;
-import org.springframework.stereotype.Service;
-
 import com.uc.ms_security.dto.user.CreateUserDTO;
 import com.uc.ms_security.dto.user.UpdateUserDTO;
+import com.uc.ms_security.dto.user.UserDetailResponseDTO;
 import com.uc.ms_security.dto.user.UserResponseDTO;
 import com.uc.ms_security.entity.User;
 import com.uc.ms_security.exception.ApplicationException;
 import com.uc.ms_security.exception.ErrorCase;
 import com.uc.ms_security.mapper.UserMapper;
 import com.uc.ms_security.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,12 +34,10 @@ public class UserService {
         User savedUser = userRepository.save(user);
         return userMapper.toResponseDTO(savedUser);
     }
-
     public List<UserResponseDTO> findAll() {
-        List<User> users = userRepository.findAll();
+        List<User> users =userRepository.findAll();
         return userMapper.toResponseDTOList(users);
     }
-
     private User findUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ApplicationException(
@@ -49,22 +46,18 @@ public class UserService {
                 ));
     }
 
-    public UserDetailResponseDTO findByIdAndProfile(Long id) {
-        User user =userRepository
-                .findWithProfileById(id)
-                .orElseThrow(
-                        () -> new ApplicationException(
-                                ErrorCase.NOT_FOUND,
-                                "Usuario no encontrado con id: " + id
-                        )
-                );
-
-        return userMapper.toDetailResponseDTO(user);
-    }
-
     public UserResponseDTO findById(Long id) {
         User user = findUser(id);
         return userMapper.toResponseDTO(user);
+    }
+
+    public UserDetailResponseDTO findByIdWithProfile(Long id) {
+        User user = userRepository.findWithProfileById(id)
+                .orElseThrow(() -> new ApplicationException(
+                        ErrorCase.NOT_FOUND,
+                        "Usuario no encontrado con id: " + id
+                ));
+        return userMapper.toDetailResponseDTO(user);
     }
 
     public UserResponseDTO update(Long id, UpdateUserDTO dto) {
@@ -79,9 +72,12 @@ public class UserService {
         User updatedUser = userRepository.save(user);
         return userMapper.toResponseDTO(updatedUser);
     }
-
     public void delete(Long id) {
         User user = findUser(id);
         userRepository.delete(user);
     }
 }
+
+
+
+

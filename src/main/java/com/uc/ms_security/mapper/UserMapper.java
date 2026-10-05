@@ -5,19 +5,16 @@ import com.uc.ms_security.dto.user.UpdateUserDTO;
 import com.uc.ms_security.dto.user.UserDetailResponseDTO;
 import com.uc.ms_security.dto.user.UserResponseDTO;
 import com.uc.ms_security.entity.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-
+@RequiredArgsConstructor
 public class UserMapper {
 
     private final ProfileMapper profileMapper;
-
-    public UserMapper(ProfileMapper profileMapper) {
-        this.profileMapper = profileMapper;
-    }
 
     public User toEntity(CreateUserDTO dto) {
         User user = new User();
@@ -60,5 +57,7 @@ public class UserMapper {
                 .map(this::toResponseDTO)
                 .toList();
     }
-
 }
+
+
+
